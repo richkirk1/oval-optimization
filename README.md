@@ -11,6 +11,11 @@ This algorithm is split into two parts: the first being a linear programming for
 - tsp.py: containts program main algorithmic code along with other helper methods
 - constants.py: contains data pertaining to the oval path lengths, numbered nodes, and some other auxiliary constants
 - "Oval with lengths and numbered nodes".png: Picture that maps the numbered nodes to places on the actual oval and names sites along the oval
+  - Red and green lines indicate which building or direction are considered the starting point of a particular node
+  - Blue and pink lines indicate time delays and time bonuses respectively
+  - White lines indicate a missing path from the photo taken
+  - Orange circles and numbers indicate an intersection/vertex and that intersections/vertexes id
+  - White numbers indicate distance in feet of a path it is notated on
 
 ## How to run
 ### Requirements
@@ -21,3 +26,4 @@ This algorithm is split into two parts: the first being a linear programming for
 ### Intructions
 - Download both tsp.py and constants.py into the same directory
 - In main() of tsp.py, change nodes in output based on desired stops. There is an option for ordering stops as a boolean parameter to the travelingSalesman problem.
+- Output shows a path arrow indicating next node and prints out the path of nodes from one destination to another
