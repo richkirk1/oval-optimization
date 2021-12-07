@@ -4,17 +4,17 @@ from constants import *
 
 
 def main():
-    nodes = [6, 63]
-    travelingSalesman(nodes)
+    nodes = [6, 24, 30, 59]
+    avoidNodes = []
+    travelingSalesman(nodes, set(avoidNodes))
     return
 
 
-def travelingSalesman(nodes: list, isOrdered: bool = False):
+def travelingSalesman(nodes: list, avoidNodes: set):
     if not nodes:
         return
 
     n = len(nodes)
-
     x = cp.Variable((n, n), boolean=True)
     t = cp.Variable(n, integer=True)
     # Distances
@@ -23,18 +23,20 @@ def travelingSalesman(nodes: list, isOrdered: bool = False):
     for edge, dist in costs.items():
         i = nodes.index(edge[0])
         j = nodes.index(edge[1])
-        if isOrdered and i == 0 and j == n - 1:
-            c[i, j] = 0
-            c[j, i] = 0
-        else:
-            c[i, j] = dist[0]
-            c[j, i] = dist[0]
+
+        c[i, j] = dist[0]
+        c[j, i] = dist[0]
 
     """
     Constraints
     """
     constraints = []
-
+    
+    for node in avoidNodes:
+        for i in range(n):
+            constraints.append(x[i, node])
+            constraints.append(x[node, i])
+            
     for i in range(n):
         indices = np.hstack((np.arange(0, i), np.arange(i + 1, n)))
         constraints.append(sum(x[i, indices]) == 1)
@@ -53,10 +55,10 @@ def travelingSalesman(nodes: list, isOrdered: bool = False):
     problem = cp.Problem(cp.Minimize(obj_func), constraints)
 
     problem.solve(solver=cp.GUROBI)
-    print(obj_func.value)
-    print(x.value)
-    startToStopDist = costs[(nodes[0], nodes[1])]
-    print(startToStopDist)
+    l = printAdjacencyMatrix(x.value, start=0, stop=n-1)
+    for i in range(len(l)-1):
+        print(f"{nodes[l[i]]} -> {nodes[l[i+1]]}")
+        print(f"cost: {costs[(nodes[l[i]], nodes[l[i+1]])][0]}, node path: {costs[(nodes[l[i]], nodes[l[i+1]])][1]}")
     return (obj_func.value, x.value)
 
 
