@@ -1,3 +1,7 @@
+# (i, j): (d, t)
+# (i, j) represent an edge between the i-th and j-th node. 
+# d represents the distance in feet between the nodes i and j
+# t represents the time delay/bonus constant for busy/unoccupied paths
 edges = {
     (1, 2): (113, 1),
     (1, 4): (221, 1),
